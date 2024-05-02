@@ -14,4 +14,7 @@ public interface IProductsService
 
     Task<Product> GetByArticleNumber(string article);
     Task<IEnumerable<Product>> FindProduct(string searchString, string category);
+    Task<List<string>> GetCategories();
+    Task<List<Manufacturer>> GetManufacturers();
+    Task<List<Supplier>> GetSuppliers();
 }

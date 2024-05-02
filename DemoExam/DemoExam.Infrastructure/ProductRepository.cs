@@ -96,4 +96,19 @@ internal class ProductRepository : IProductRepository
         return products.Where(x =>
             x.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase));
     }
+
+    public Task<List<string>> GetCategories()
+    {
+        return _tradeContext.Products.Select(x => x.Category).Distinct().ToListAsync();
+    }
+
+    public Task<List<Manufacturer>> GetManufacturers()
+    {
+        return _tradeContext.Manufacturers.ToListAsync();
+    }
+
+    public Task<List<Supplier>> GetSuppliers()
+    {
+        return _tradeContext.Suppliers.ToListAsync();
+    }
 }

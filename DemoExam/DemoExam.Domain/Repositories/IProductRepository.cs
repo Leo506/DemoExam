@@ -19,4 +19,7 @@ public interface IProductRepository
     Task<bool> Contains(string articleNumber);
     Task<IEnumerable<Product>> Find(string searchString, string category);
     Task<IEnumerable<Product>> Find(string searchString);
+    Task<List<string>> GetCategories();
+    Task<List<Manufacturer>> GetManufacturers();
+    Task<List<Supplier>> GetSuppliers();
 }

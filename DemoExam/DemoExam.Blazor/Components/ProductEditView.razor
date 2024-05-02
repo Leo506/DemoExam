@@ -1,4 +1,8 @@
-﻿@using DemoExam.Blazor.ViewModels
+﻿@using Arbus.Network
+@using DemoExam.Blazor.Network.Endpoints
+@using DemoExam.Blazor.ViewModels
+@using DemoExam.Domain.Models
+@inject HttpClientContext Context
 <div class="modal fade" id="productEditModal" tabindex="-1" aria-labelledby="productEditModalLabel">
     <div class="modal-dialog">
         <div class="modal-content order-content @(ProductEditViewModel is null ? "justify-content-center align-items-center" : "")">
@@ -30,8 +34,14 @@
                         <div class="mb-3">
                             <label for="category_input" class="form-label">Катерогия</label>
                             <InputText id="category_input" @bind-Value="ProductEditViewModel.Category" 
-                                       class="form-control form-text"/>
+                                       class="form-control form-text" list="categories"/>
                             <ValidationMessage For="() => ProductEditViewModel.Category"/>
+                            <datalist id="categories">
+                                @foreach (var category in _categories)
+                                {
+                                <option value="@category"></option>
+                                }
+                            </datalist>
                         </div>
                         <div class="mb-3">
                             <label for="photo_input" class="form-label">Фото</label>
@@ -65,14 +75,26 @@
                         <div class="mb-3">
                             <label for="manufacturer_input" class="form-label">Производитель</label>
                             <InputText id="manufacturer_input" @bind-Value="ProductEditViewModel.ManufacturerName" 
-                                       class="form-control form-text"/>
+                                       class="form-control form-text" list="manufacturers"/>
                             <ValidationMessage For="() => ProductEditViewModel.ManufacturerName"/>
+                            <datalist id="manufacturers">
+                                @foreach (var manufacturer in _manufacturers)
+                                {
+                                <option value="@manufacturer.Name"/>
+                                }
+                            </datalist>
                         </div>
                         <div class="mb-3">
                             <label for="supplier_input" class="form-label">Поставщик</label>
                             <InputText id="supplier_input" @bind-Value="ProductEditViewModel.SupplierName" 
-                                       class="form-control form-text"/>
+                                       class="form-control form-text" list="suppliers"/>
                             <ValidationMessage For="() => ProductEditViewModel.SupplierName"/>
+                            <datalist id="suppliers">
+                                @foreach (var supplier in _suppliers)
+                                {
+                                <option value="@supplier.Name"/>
+                                }
+                            </datalist>
                         </div>
                         <button type="submit" class="btn btn-primary">Сохранить</button>
                     </EditForm>
@@ -84,6 +106,10 @@
 </div>
 
 @code {
+    
+    private List<string> _categories = [];
+    private List<Manufacturer> _manufacturers = [];
+    private List<Supplier> _suppliers = [];
     
     [Parameter]
     public ProductEditViewModel? ProductEditViewModel { get; set; }
@@ -101,5 +127,12 @@
         await obj.File.OpenReadStream().CopyToAsync(ms);
         ProductEditViewModel!.Photo = Convert.ToBase64String(ms.ToArray());
         StateHasChanged();
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await Context.RunEndpoint(new CategoriesEndpoint());
+        _manufacturers = await Context.RunEndpoint(new ManufacturersEndpoint());
+        _suppliers = await Context.RunEndpoint(new SuppliersEndpoint());
     }
 }

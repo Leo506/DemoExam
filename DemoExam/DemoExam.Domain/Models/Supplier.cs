@@ -1,4 +1,6 @@
-﻿namespace DemoExam.Domain.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace DemoExam.Domain.Models;
 
 public class Supplier
 {
@@ -6,5 +8,6 @@ public class Supplier
 
     public string Name { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual ICollection<Product> Products { get; } = new List<Product>();
 }

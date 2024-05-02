@@ -46,4 +46,19 @@ public class ProductsService : IProductsService
             ? _repository.Find(searchString) 
             : _repository.Find(searchString, category);
     }
+
+    public Task<List<string>> GetCategories()
+    {
+        return _repository.GetCategories();
+    }
+
+    public Task<List<Manufacturer>> GetManufacturers()
+    {
+        return _repository.GetManufacturers();
+    }
+
+    public Task<List<Supplier>> GetSuppliers()
+    {
+        return _repository.GetSuppliers();
+    }
 }
