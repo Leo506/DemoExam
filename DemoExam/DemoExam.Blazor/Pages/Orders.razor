@@ -6,8 +6,8 @@
 @using DemoExam.Domain.Models
 @using Arbus.Network
 @using BlazorBootstrap
-@using DemoExam.Blazor.Comparers
 @using DemoExam.Blazor.Components
+@using DemoExam.Blazor.Comparers
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavigationManager
 @inject HttpClientContext ClientContext
@@ -89,7 +89,7 @@
             return false;
         }
 
-        if (authState.User.IsInRole(Role.AdminRoleName) is false && authState.User.IsInRole(Role.ManagerRoleName))
+        if (authState.User.IsInRole(Role.AdminRoleName) is false && authState.User.IsInRole(Role.ManagerRoleName) is false)
         {
             NavigationManager.NavigateTo("/");
             return false;
