@@ -8,11 +8,9 @@ public class OrderStatusAttribute: ValidationAttribute
 {
     public override string FormatErrorMessage(string name)
     {
-        return $"Order status must be \"{OrderStatusConstants.NewOrder}\" or \"{OrderStatusConstants.Completed}\"";
+        return
+            $"Order status must be \"{OrderStatusConstants.NewOrder}\", \"{OrderStatusConstants.Completed}\" or \"{OrderStatusConstants.Cancelled}\"";
     }
 
-    public override bool IsValid(object? value)
-    {
-        return value is OrderStatusConstants.NewOrder or OrderStatusConstants.Completed or null;
-    }
+    public override bool IsValid(object? value) => OrderStatusConstants.GetAvailableStatuses().Contains(value);
 }

@@ -1,12 +1,15 @@
 ﻿
+using DemoExam.Domain.Models;
+
 namespace DemoExam.Blazor.Comparers;
 
 public class StatusComparer : IComparer<string>
 {
     private static readonly Dictionary<string, int> Weights = new()
     {
-        ["Новый"] = 1,
-        ["Завершен"] = 2,
+        [OrderStatusConstants.NewOrder] = 1,
+        [OrderStatusConstants.Completed] = 2,
+        [OrderStatusConstants.Cancelled] = 3
     };
 
     public int Compare(string? x, string? y)
