@@ -1,4 +1,5 @@
 ﻿using DatabaseFiller;
+using DemoExam.Domain.Extensions;
 using DemoExam.Domain.Models;
 using DemoExam.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,7 @@ if (context.Users.Any() is false)
             Name = data[1].Split()[0],
             Patronymic = data[1].Split()[1],
             Login = data[2],
-            Password = data[3],
+            Password = data[3].ComputeHash(),
             RoleId = role.Id
         });
     });
