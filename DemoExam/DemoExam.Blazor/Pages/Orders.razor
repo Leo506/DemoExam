@@ -120,6 +120,7 @@
             await ClientContext.RunEndpoint(new OrderEditEndpoint(_currentEditViewModel!.Id, _currentEditViewModel.ToDto()));
             await JsRuntime.CloseModal();
             await UpdateOrdersList();
+            ToastService.Notify(new ToastMessage(ToastType.Warning, IconName.Alarm, "Напоминание", "Не забудьте сообщить клиенту об изменениях"));
         }
         catch (Exception e)
         {

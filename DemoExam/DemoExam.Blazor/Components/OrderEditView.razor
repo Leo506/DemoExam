@@ -24,7 +24,7 @@
                         <div class="mb-3">
                             <label for="status_input" class="form-label">Статус</label>
                             <InputSelect id="status_input" @bind-Value="ViewModel.Status"
-                                         class="form-select">
+                                         class="form-select" disabled="@(!_canChangeOrderStatus)">
                                 @foreach (var status in OrderStatusConstants.GetAvailableStatuses())
                                 {
                                     <option value="@status">@status</option>
@@ -102,7 +102,7 @@
                             </tr>
                             </tfoot>
                         </table>
-                        <button type="submit" class="btn btn-primary" @onclick="async () => await SaveChanges()">
+                        <button type="submit" class="btn btn-primary" @onclick="() => SaveChanges()">
                             Сохранить
                         </button>
                     </EditForm>
@@ -119,18 +119,25 @@
     public OrderEditViewModel? ViewModel { get; set; }
     
     [Parameter]
-    public Func<Task> SaveChanges { get; set; }
+    public Func<Task> SaveChanges { get; set; } = default!;
 
-    private List<PickupPoint> _pickupPoints = new();
+    private List<PickupPoint> _pickupPoints = [];
+    private bool _canChangeOrderStatus = false;
 
     protected override async Task OnInitializedAsync()
     {
         _pickupPoints = await PickupPointService.GetAll();
     }
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _canChangeOrderStatus = ViewModel?.Status is not OrderStatusConstants.Completed;
+    }
+
     private void AddItem(string article)
     {
-        ViewModel?.AddItem(article);
+        ViewModel.AddItem(article);
         StateHasChanged();
     }
 

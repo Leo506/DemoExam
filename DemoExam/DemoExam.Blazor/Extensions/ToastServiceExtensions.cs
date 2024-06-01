@@ -1,5 +1,6 @@
 ﻿using Arbus.Network.Exceptions;
 using BlazorBootstrap;
+using DemoExam.Domain.Exceptions;
 
 namespace DemoExam.Blazor.Extensions;
 
@@ -7,20 +8,25 @@ public static class ToastServiceExtensions
 {
     public static void FromException(this ToastService toastService, Exception exception)
     {
-        if (exception is NetworkException)
-            toastService.ToastForNetworkException();
+        if (exception is NetworkException networkException)
+            toastService.ToastForNetworkException(networkException);
         else
             toastService.ToastUnexpectedException();
     }
-    
-    public static void ToastForNetworkException(this ToastService toastService)
+
+    private static void ToastForNetworkException(this ToastService toastService, NetworkException networkException)
     {
+        var message = networkException.Message switch
+        {
+            NotEnoughProductsInStockException.MessageText => "Недостаточно товаров на складе",
+            _ => "При обработке запроса произошла ошибка. Повторите попытку позже"
+        };
         toastService.Notify(new ToastMessage()
         {
             Type = ToastType.Danger,
             IconName = IconName.EmojiFrown,
             Title = "Ошибка",
-            Message = "При обработке запроса произошла ошибка. Повторите попытку позже"
+            Message = message
         });
     }
 

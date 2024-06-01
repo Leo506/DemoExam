@@ -11,6 +11,7 @@ public class TestFixture
     [SetUp]
     public void Setup()
     {
+        
         WebDriver = new ChromeDriver(new ChromeOptions());
         WebDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
         WebDriver.Navigate().GoToUrl("http://localhost:5029/catalog");
