@@ -19,9 +19,9 @@ if (context.Roles.Any() is false)
 
 // Users
 if (context.Users.Any() is false)
+{
     await ImportData("Data/User.csv", ';', async data =>
     {
-        var tmp = context.Roles.Any();
         var role = await context.Roles.FirstOrDefaultAsync(x => x.Name == data[4]);
         await context.Users.AddAsync(new User
         {
@@ -33,6 +33,29 @@ if (context.Users.Any() is false)
             RoleId = role.Id
         });
     });
+    var roles = await context.Roles.ToListAsync();
+    var adminRole = roles.First(x => x.Name == Role.AdminRoleName);
+    var managerRole = roles.First(x => x.Name == Role.ManagerRoleName);
+    await context.Users.AddAsync(new User
+    {
+        Surname = "Админов",
+        Name = "Админ",
+        Patronymic = "Админович",
+        Login = "admin",
+        Password = "admin".ComputeHash(),
+        RoleId = adminRole.Id
+    });
+    await context.Users.AddAsync(new User
+    {
+        Surname = "Менеджеров",
+        Name = "Менеджер",
+        Patronymic = "Менеджерович",
+        Login = "manager",
+        Password = "manager".ComputeHash(),
+        RoleId = managerRole.Id
+    });
+    await context.SaveChangesAsync();
+}
 
 // Pickup points
 if (context.PickupPoints.Any() is false)

@@ -1,9 +1,9 @@
 ﻿@page "/Catalog"
 @using DemoExam.Blazor.Shared.Dto.Responses
-@using DemoExam.Blazor.Network.Endpoints
 @using Arbus.Network
 @using BlazorBootstrap
 @using DemoExam.Blazor.Components
+@using DemoExam.Blazor.Network.Endpoints
 @inject HttpClientContext ClientContext
 @inject ToastService ToastService
 
@@ -81,7 +81,11 @@
             : Enumerable.Empty<string>();
     }
 
-    private async Task GetCatalog() => _products = await ClientContext.RunEndpoint(new CatalogEndpoint());
+    private async Task GetCatalog()
+    {
+        var products = await ClientContext.RunEndpoint(new CatalogEndpoint());
+        _products = products.OrderByDescending(x => x.Photo);
+    }
 
     private Task OnSearchInputChanged() => OnFilterChanged();
 
